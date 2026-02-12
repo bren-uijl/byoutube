@@ -22,10 +22,15 @@ def download_video():
     try:
         # Instellingen voor yt-dlp
         # We kiezen voor 'best' om een mp4-bestand te krijgen dat de browser snapt
-        ydl_opts = {
-            'format': 'best[ext=mp4]',
-            'outtmpl': f'{DOWNLOAD_FOLDER}/%(id)s.%(ext)s',
+ydl_opts = {
+    'format': 'best[ext=mp4]',
+    'outtmpl': f'{DOWNLOAD_FOLDER}/%(id)s.%(ext)s',
+    'extractor_args': {
+        'youtube': {
+            'player_client': ['ios', 'android'],
         }
+    }
+}
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
