@@ -20,24 +20,25 @@ def download_video():
         return "Voer aub een geldige URL in.", 400
 
     try:
-        # Instellingen voor yt-dlp
-        # We kiezen voor 'best' om een mp4-bestand te krijgen dat de browser snapt
-ydl_opts = {
-    'format': 'best[ext=mp4]',
-    'outtmpl': f'{DOWNLOAD_FOLDER}/%(id)s.%(ext)s',
-    'extractor_args': {
-        'youtube': {
-            'player_client': ['ios', 'android'],
+        # Alles hieronder moet ingesprongen zijn t.o.v. 'try'
+        ydl_opts = {
+            'format': 'best[ext=mp4]',
+            'outtmpl': f'{DOWNLOAD_FOLDER}/%(id)s.%(ext)s',
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['ios', 'android'],
+                }
+            }
         }
-    }
-}
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
             filename = f"{info['id']}.mp4"
             
         return render_template('index.html', filename=filename)
+        
     except Exception as e:
+        # Ook dit blok moet netjes onder 'except' staan
         return f"Er is iets misgegaan: {str(e)}", 500
 
 @app.route('/files/<filename>')
